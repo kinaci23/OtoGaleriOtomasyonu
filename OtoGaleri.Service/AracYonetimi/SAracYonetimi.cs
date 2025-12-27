@@ -21,10 +21,13 @@ namespace OtoGaleri.Service.AracYonetimi
             _sqlHelper = new SqlHelper();
         }
 
+        // =============================================================
+        // BÖLÜM 1: LİSTELEME VE COMBOBOX VERİLERİ
+        // =============================================================
+
         /// <summary>
         /// Veritabanındaki tüm markaları getirir.
         /// </summary>
-        /// <returns>Marka listesini içeren DataTable</returns>
         public DataTable GetMarkaListesi()
         {
             try
@@ -32,37 +35,25 @@ namespace OtoGaleri.Service.AracYonetimi
                 string query = "SELECT MarkaID, MarkaAdi FROM Tbl_Markalar ORDER BY MarkaAdi";
                 return _sqlHelper.GetDataTable(query);
             }
-            catch (Exception)
-            {
-                // Hata durumunda loglama yapılabilir, şimdilik boş tablo dönüyoruz.
-                return new DataTable();
-            }
+            catch { return new DataTable(); }
         }
 
         /// <summary>
         /// Seçilen markaya ait modelleri getirir.
         /// </summary>
-        /// <param name="markaId">Filtrelenecek Marka ID</param>
-        /// <returns>Model listesini içeren DataTable</returns>
         public DataTable GetModelListesiByMarkaId(int markaId)
         {
             try
             {
-                // Parametreli sorgu yerine string format kullandık, gerçek projede parametre kullanılmalı
                 string query = $"SELECT ModelID, ModelAdi FROM Tbl_Modeller WHERE MarkaID = {markaId} ORDER BY ModelAdi";
                 return _sqlHelper.GetDataTable(query);
             }
-            catch (Exception)
-            {
-                return new DataTable();
-            }
+            catch { return new DataTable(); }
         }
 
         /// <summary>
         /// Seçilen modele ait donanım paketlerini getirir.
         /// </summary>
-        /// <param name="modelId">Filtrelenecek Model ID</param>
-        /// <returns>Paket listesini içeren DataTable</returns>
         public DataTable GetPaketListesiByModelId(int modelId)
         {
             try
@@ -70,58 +61,16 @@ namespace OtoGaleri.Service.AracYonetimi
                 string query = $"SELECT PaketID, PaketAdi FROM Tbl_Paketler WHERE ModelID = {modelId} ORDER BY PaketAdi";
                 return _sqlHelper.GetDataTable(query);
             }
-            catch (Exception)
-            {
-                return new DataTable();
-            }
+            catch { return new DataTable(); }
         }
 
-        /// <summary>
-        /// Yeni bir araç kaydını veritabanına ekler.
-        /// </summary>
-        public string AracEkle(int paketId, string yil, int km, string renk, decimal alisFiyat, decimal satisFiyat, string aciklama)
-        {
-            // Kural: string hata variable'ı null atanıp...
-            string hata = null;
-
-            try
-            {
-                // SQL Sorgusu (Basit string birleştirme ile)
-                string query = $@"INSERT INTO Tbl_Araclar 
-                                (PaketID, Yil, Km, Renk, AlisFiyat, SatisFiyat, Aciklama, KayitTarihi) 
-                                VALUES 
-                                ({paketId}, '{yil}', {km}, '{renk}', {alisFiyat.ToString().Replace(',', '.')}, {satisFiyat.ToString().Replace(',', '.')}, '{aciklama}', GETDATE())";
-
-                int result = _sqlHelper.ExecuteQuery(query);
-
-                if (result <= 0)
-                {
-                    hata = "Kayıt veritabanına eklenemedi.";
-                }
-            }
-            catch (Exception ex)
-            {
-                // Kural: Exception'da message'a eşitlenmiş mi?
-                hata = ex.Message;
-            }
-
-            // Kural: Tüm methodlar string döndürmeli (Hata yoksa null döner).
-            return hata;
-        }
-
-        /// <summary>
-        /// GridView'de göstermek üzere araçların detaylı listesini (Marka, Model, Paket isimleriyle birleştirerek) getirir.
-        /// </summary>
-        /// <returns>Özelleştirilmiş araç listesi tablosu</returns>
         /// <summary>
         /// Araçları durumuna göre (Galeride veya Satıldı) filtreleyerek getirir.
         /// </summary>
-        /// <param name="satildiMi">false: Galeridekiler, true: Satılanlar</param>
         public DataTable GetAracListesiByDurum(bool satildiMi)
         {
             try
             {
-                // Parametreden gelen true/false değerini veritabanındaki 1/0 formatına çeviriyoruz
                 int durumKodu = satildiMi ? 1 : 0;
 
                 string query = $@"
@@ -142,7 +91,51 @@ namespace OtoGaleri.Service.AracYonetimi
                     INNER JOIN Tbl_Paketler P ON A.PaketID = P.PaketID
                     INNER JOIN Tbl_Modeller Mo ON P.ModelID = Mo.ModelID
                     INNER JOIN Tbl_Markalar M ON Mo.MarkaID = M.MarkaID
-                    WHERE A.SatisDurumu = {durumKodu}  -- FİLTRE BURADA
+                    WHERE A.SatisDurumu = {durumKodu}
+                    ORDER BY A.KayitTarihi DESC";
+
+                return _sqlHelper.GetDataTable(query);
+            }
+            catch { return new DataTable(); }
+        }
+
+        // =============================================================
+        // BÖLÜM 2: ARAMA İŞLEMİ (EKSİK OLAN KISIM BURASIYDI)
+        // =============================================================
+
+        /// <summary>
+        /// Marka, Model veya Yıl bilgisine göre arama yapar.
+        /// </summary>
+        public DataTable AracAra(string arananKelime, bool satildiMi)
+        {
+            try
+            {
+                int durumKodu = satildiMi ? 1 : 0;
+
+                string query = $@"
+                    SELECT 
+                        A.AracID,
+                        M.MarkaAdi AS [Marka],
+                        Mo.ModelAdi AS [Model],
+                        P.PaketAdi AS [Paket / Donanım],
+                        A.Yil AS [Yıl],
+                        A.Km,
+                        A.Renk,
+                        A.SatisFiyat AS [Satış Fiyatı],
+                        CASE 
+                            WHEN A.SatisDurumu = 1 THEN 'SATILDI' 
+                            ELSE 'GALERİDE' 
+                        END AS [Durum]
+                    FROM Tbl_Araclar A
+                    INNER JOIN Tbl_Paketler P ON A.PaketID = P.PaketID
+                    INNER JOIN Tbl_Modeller Mo ON P.ModelID = Mo.ModelID
+                    INNER JOIN Tbl_Markalar M ON Mo.MarkaID = M.MarkaID
+                    WHERE A.SatisDurumu = {durumKodu} 
+                    AND (
+                        M.MarkaAdi LIKE '%{arananKelime}%' OR 
+                        Mo.ModelAdi LIKE '%{arananKelime}%' OR 
+                        A.Yil LIKE '%{arananKelime}%'
+                    )
                     ORDER BY A.KayitTarihi DESC";
 
                 return _sqlHelper.GetDataTable(query);
@@ -153,23 +146,19 @@ namespace OtoGaleri.Service.AracYonetimi
             }
         }
 
-        // --- YENİ EKLENEN METOTLAR (GÜNCELLEME İÇİN) ---
+        // =============================================================
+        // BÖLÜM 3: CRUD İŞLEMLERİ (EKLE - GÜNCELLE - SİL - GETİR)
+        // =============================================================
 
         /// <summary>
-        /// ID'si verilen aracın tüm bilgilerini (Marka ve Model ID'leri dahil) getirir.
-        /// Formu düzenleme modunda açarken kutuları doldurmak için kullanılır.
+        /// ID'si verilen aracın tüm bilgilerini getirir (Düzenleme ekranı için).
         /// </summary>
         public DataRow GetAracBilgi(int aracId)
         {
             try
             {
-                // Aracı getirirken Paket -> Model -> Marka ilişkisiyle üst ID'leri de çekiyoruz.
-                // Bu sayede ComboBox'ları doğru seçili getirebileceğiz.
                 string query = $@"
-                    SELECT 
-                        A.*, 
-                        P.ModelID, 
-                        Mo.MarkaID 
+                    SELECT A.*, P.ModelID, Mo.MarkaID 
                     FROM Tbl_Araclar A
                     INNER JOIN Tbl_Paketler P ON A.PaketID = P.PaketID
                     INNER JOIN Tbl_Modeller Mo ON P.ModelID = Mo.ModelID
@@ -177,26 +166,40 @@ namespace OtoGaleri.Service.AracYonetimi
 
                 DataTable dt = _sqlHelper.GetDataTable(query);
 
-                if (dt.Rows.Count > 0)
-                    return dt.Rows[0]; // Tek bir satır (DataRow) döndür
-                else
-                    return null;
+                if (dt.Rows.Count > 0) return dt.Rows[0];
+                else return null;
             }
-            catch (Exception)
-            {
-                return null;
-            }
+            catch { return null; }
         }
 
         /// <summary>
-        /// Mevcut bir araç kaydını günceller.
+        /// Yeni araç ekler.
+        /// </summary>
+        public string AracEkle(int paketId, string yil, int km, string renk, decimal alisFiyat, decimal satisFiyat, string aciklama)
+        {
+            string hata = null;
+            try
+            {
+                string query = $@"INSERT INTO Tbl_Araclar 
+                                (PaketID, Yil, Km, Renk, AlisFiyat, SatisFiyat, Aciklama, KayitTarihi, SatisDurumu) 
+                                VALUES 
+                                ({paketId}, '{yil}', {km}, '{renk}', {alisFiyat.ToString().Replace(',', '.')}, {satisFiyat.ToString().Replace(',', '.')}, '{aciklama}', GETDATE(), 0)";
+
+                int result = _sqlHelper.ExecuteQuery(query);
+                if (result <= 0) hata = "Kayıt eklenemedi.";
+            }
+            catch (Exception ex) { hata = ex.Message; }
+            return hata;
+        }
+
+        /// <summary>
+        /// Mevcut aracı günceller.
         /// </summary>
         public string AracGuncelle(int aracId, int paketId, string yil, int km, string renk, decimal alisFiyat, decimal satisFiyat, string aciklama)
         {
             string hata = null;
             try
             {
-                // UPDATE sorgusu
                 string query = $@"
                     UPDATE Tbl_Araclar SET 
                         PaketID = {paketId},
@@ -209,19 +212,14 @@ namespace OtoGaleri.Service.AracYonetimi
                     WHERE AracID = {aracId}";
 
                 int result = _sqlHelper.ExecuteQuery(query);
-
-                if (result <= 0)
-                    hata = "Güncelleme işlemi yapılamadı.";
+                if (result <= 0) hata = "Güncelleme yapılamadı.";
             }
-            catch (Exception ex)
-            {
-                hata = ex.Message;
-            }
+            catch (Exception ex) { hata = ex.Message; }
             return hata;
         }
 
         /// <summary>
-        /// ID'si verilen aracı veritabanından siler.
+        /// Aracı siler.
         /// </summary>
         public string AracSil(int aracId)
         {
@@ -230,30 +228,24 @@ namespace OtoGaleri.Service.AracYonetimi
             {
                 string query = $"DELETE FROM Tbl_Araclar WHERE AracID = {aracId}";
                 int result = _sqlHelper.ExecuteQuery(query);
-
-                if (result <= 0)
-                    hata = "Silme işlemi başarısız oldu veya kayıt bulunamadı.";
+                if (result <= 0) hata = "Silme işlemi başarısız.";
             }
-            catch (Exception ex)
-            {
-                hata = ex.Message; // İlişkisel veriler varsa (örn: Satış tablosu) SQL hatası dönebilir.
-            }
+            catch (Exception ex) { hata = ex.Message; }
             return hata;
         }
 
+        // =============================================================
+        // BÖLÜM 4: SATIŞ VE RAPORLAMA
+        // =============================================================
+
         /// <summary>
-        /// ID'si verilen aracı "Satıldı" olarak işaretler.
-        /// </summary>
-        /// <summary>
-        /// ID'si verilen aracı "Satıldı" olarak işaretler ve müşteri bilgilerini kaydeder.
+        /// ID'si verilen aracı "Satıldı" yapar ve müşteri bilgisini kaydeder.
         /// </summary>
         public string AracSat(int aracId, string adSoyad, string telefon)
         {
             string hata = null;
             try
             {
-                // SQL Sorgusunu Güncelliyoruz:
-                // Hem durumu 1 yapıyoruz, hem tarihi atıyoruz, hem de müşteri bilgilerini yazıyoruz.
                 string query = $@"
                     UPDATE Tbl_Araclar SET 
                         SatisDurumu = 1, 
@@ -263,44 +255,33 @@ namespace OtoGaleri.Service.AracYonetimi
                     WHERE AracID = {aracId}";
 
                 int result = _sqlHelper.ExecuteQuery(query);
-
-                if (result <= 0)
-                    hata = "Satış işlemi gerçekleştirilemedi.";
+                if (result <= 0) hata = "Satış işlemi gerçekleştirilemedi.";
             }
-            catch (Exception ex)
-            {
-                hata = ex.Message;
-            }
+            catch (Exception ex) { hata = ex.Message; }
             return hata;
         }
+
         /// <summary>
-        /// Satılan araçların toplam alış, toplam satış ve adet bilgisini getirir.
+        /// Satılan araçların toplam kar/zarar raporunu getirir.
         /// </summary>
         public DataRow GetSatisRaporu()
         {
             try
             {
-                // SQL'in SUM fonksiyonu ile veritabanında toplama işlemi yapıyoruz.
-                // ISNULL: Eğer hiç satış yoksa NULL yerine 0 gelmesini sağlar.
                 string query = @"
                     SELECT 
                         COUNT(*) as ToplamAdet, 
                         ISNULL(SUM(AlisFiyat), 0) as ToplamAlis, 
                         ISNULL(SUM(SatisFiyat), 0) as ToplamSatis 
                     FROM Tbl_Araclar 
-                    WHERE SatisDurumu = 1"; // Sadece satılanları topla
+                    WHERE SatisDurumu = 1";
 
                 DataTable dt = _sqlHelper.GetDataTable(query);
 
-                if (dt.Rows.Count > 0)
-                    return dt.Rows[0];
-                else
-                    return null;
+                if (dt.Rows.Count > 0) return dt.Rows[0];
+                else return null;
             }
-            catch (Exception)
-            {
-                return null;
-            }
+            catch { return null; }
         }
     }
 }

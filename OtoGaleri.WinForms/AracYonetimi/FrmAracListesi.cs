@@ -40,10 +40,15 @@ namespace OtoGaleri.WinForms.AracYonetimi
         // SEKME DEĞİŞTİĞİNDE ÇALIŞACAK METOD
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Listele(); // Listeyi yenile
+            // Sekme değişince arama kutusunu temizle
+            // (Bu işlem tetiklendiğinde zaten txtArama_TextChanged çalışacak ve listeyi normal haliyle yükleyecektir)
+            txtArama.Text = "";
 
-            // Ufak bir makyaj: Satılanlar sekmesindeysek "Sil" ve "Düzenle" butonlarını gizleyebiliriz
-            // Şimdilik sadece listeyi yenilesin yeterli.
+            // Eğer Text zaten boşsa tetiklenmez, o yüzden manuel listeleme yapalım:
+            if (string.IsNullOrEmpty(txtArama.Text))
+            {
+                Listele();
+            }
         }
 
         // GRID AYARLARI
@@ -211,6 +216,25 @@ namespace OtoGaleri.WinForms.AracYonetimi
             else
             {
                 MessageBox.Show("Rapor alınırken bir hata oluştu.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void txtArama_TextChanged(object sender, EventArgs e)
+        {
+            string aranan = txtArama.Text.Trim(); // Başındaki sonundaki boşlukları al
+
+            // Hangi sekmedeyiz? (0: Galeride, 1: Satılanlar)
+            bool satildiMi = tabControl1.SelectedIndex == 1;
+
+            if (string.IsNullOrEmpty(aranan))
+            {
+                // Kutu boşsa normal listeyi getir
+                dgvAraclar.DataSource = _sAracYonetimi.GetAracListesiByDurum(satildiMi);
+            }
+            else
+            {
+                // Kutu doluysa ARAMA metodunu çalıştır
+                dgvAraclar.DataSource = _sAracYonetimi.AracAra(aranan, satildiMi);
             }
         }
     }

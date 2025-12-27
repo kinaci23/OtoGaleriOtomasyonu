@@ -37,6 +37,8 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.btnSatisYap = new System.Windows.Forms.Button();
             this.btnRapor = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtArama = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAraclar)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -54,6 +56,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.txtArama);
+            this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.btnRapor);
             this.panel1.Controls.Add(this.btnSatisYap);
             this.panel1.Controls.Add(this.tabControl1);
@@ -149,6 +153,23 @@
             this.btnRapor.UseVisualStyleBackColor = false;
             this.btnRapor.Click += new System.EventHandler(this.btnRapor_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(572, 80);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(51, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Araç Ara:";
+            // 
+            // txtArama
+            // 
+            this.txtArama.Location = new System.Drawing.Point(629, 77);
+            this.txtArama.Name = "txtArama";
+            this.txtArama.Size = new System.Drawing.Size(113, 20);
+            this.txtArama.TabIndex = 6;
+            this.txtArama.TextChanged += new System.EventHandler(this.txtArama_TextChanged);
+            // 
             // FrmAracListesi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -164,6 +185,7 @@
             this.Load += new System.EventHandler(this.FrmAracListesi_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAraclar)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -180,5 +202,7 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button btnSatisYap;
         private System.Windows.Forms.Button btnRapor;
+        private System.Windows.Forms.TextBox txtArama;
+        private System.Windows.Forms.Label label1;
     }
 }
