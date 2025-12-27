@@ -113,12 +113,18 @@ namespace OtoGaleri.Service.AracYonetimi
         /// GridView'de göstermek üzere araçların detaylı listesini (Marka, Model, Paket isimleriyle birleştirerek) getirir.
         /// </summary>
         /// <returns>Özelleştirilmiş araç listesi tablosu</returns>
-        public DataTable GetAracListesiDetayli()
+        /// <summary>
+        /// Araçları durumuna göre (Galeride veya Satıldı) filtreleyerek getirir.
+        /// </summary>
+        /// <param name="satildiMi">false: Galeridekiler, true: Satılanlar</param>
+        public DataTable GetAracListesiByDurum(bool satildiMi)
         {
             try
             {
-                // Kullanıcının göreceği sütunları ve okunabilir isimleri ayarlayan JOIN sorgusu
-                string query = @"
+                // Parametreden gelen true/false değerini veritabanındaki 1/0 formatına çeviriyoruz
+                int durumKodu = satildiMi ? 1 : 0;
+
+                string query = $@"
                     SELECT 
                         A.AracID,
                         M.MarkaAdi AS [Marka],
@@ -136,13 +142,13 @@ namespace OtoGaleri.Service.AracYonetimi
                     INNER JOIN Tbl_Paketler P ON A.PaketID = P.PaketID
                     INNER JOIN Tbl_Modeller Mo ON P.ModelID = Mo.ModelID
                     INNER JOIN Tbl_Markalar M ON Mo.MarkaID = M.MarkaID
+                    WHERE A.SatisDurumu = {durumKodu}  -- FİLTRE BURADA
                     ORDER BY A.KayitTarihi DESC";
 
                 return _sqlHelper.GetDataTable(query);
             }
             catch (Exception)
             {
-                // Hata durumunda boş tablo dön
                 return new DataTable();
             }
         }
@@ -233,6 +239,59 @@ namespace OtoGaleri.Service.AracYonetimi
                 hata = ex.Message; // İlişkisel veriler varsa (örn: Satış tablosu) SQL hatası dönebilir.
             }
             return hata;
+        }
+
+        /// <summary>
+        /// ID'si verilen aracı "Satıldı" olarak işaretler.
+        /// </summary>
+        public string AracSat(int aracId)
+        {
+            string hata = null;
+            try
+            {
+                // SatisDurumu = 1 (Satıldı) yapıyoruz.
+                // Satış Tarihini de şu an (GETDATE) olarak güncelliyoruz ki raporlarda lazım olacak.
+                string query = $"UPDATE Tbl_Araclar SET SatisDurumu = 1, SatisTarihi = GETDATE() WHERE AracID = {aracId}";
+
+                int result = _sqlHelper.ExecuteQuery(query);
+
+                if (result <= 0)
+                    hata = "Satış işlemi gerçekleştirilemedi.";
+            }
+            catch (Exception ex)
+            {
+                hata = ex.Message;
+            }
+            return hata;
+        }
+        /// <summary>
+        /// Satılan araçların toplam alış, toplam satış ve adet bilgisini getirir.
+        /// </summary>
+        public DataRow GetSatisRaporu()
+        {
+            try
+            {
+                // SQL'in SUM fonksiyonu ile veritabanında toplama işlemi yapıyoruz.
+                // ISNULL: Eğer hiç satış yoksa NULL yerine 0 gelmesini sağlar.
+                string query = @"
+                    SELECT 
+                        COUNT(*) as ToplamAdet, 
+                        ISNULL(SUM(AlisFiyat), 0) as ToplamAlis, 
+                        ISNULL(SUM(SatisFiyat), 0) as ToplamSatis 
+                    FROM Tbl_Araclar 
+                    WHERE SatisDurumu = 1"; // Sadece satılanları topla
+
+                DataTable dt = _sqlHelper.GetDataTable(query);
+
+                if (dt.Rows.Count > 0)
+                    return dt.Rows[0];
+                else
+                    return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }
