@@ -58,6 +58,18 @@
     <Compile Include="AracYonetimi\FrmAracListesi.Designer.cs">
       <DependentUpon>FrmAracListesi.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmAylikDetay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmAylikDetay.Designer.cs">
+      <DependentUpon>FrmAylikDetay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmFinansalRapor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmFinansalRapor.Designer.cs">
+      <DependentUpon>FrmFinansalRapor.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmSatisYap.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,6 +83,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AracYonetimi\FrmAracListesi.resx">
       <DependentUpon>FrmAracListesi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmAylikDetay.resx">
+      <DependentUpon>FrmAylikDetay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmFinansalRapor.resx">
+      <DependentUpon>FrmFinansalRapor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmSatisYap.resx">
       <DependentUpon>FrmSatisYap.cs</DependentUpon>

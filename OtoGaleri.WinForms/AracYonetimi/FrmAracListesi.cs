@@ -189,34 +189,9 @@ namespace OtoGaleri.WinForms.AracYonetimi
 
         private void btnRapor_Click(object sender, EventArgs e)
         {
-            // 1. Servisten verileri çek
-            DataRow rapor = _sAracYonetimi.GetSatisRaporu();
-
-            if (rapor != null)
-            {
-                // 2. Verileri değişkenlere al
-                int satilanAdet = Convert.ToInt32(rapor["ToplamAdet"]);
-                decimal toplamAlis = Convert.ToDecimal(rapor["ToplamAlis"]);
-                decimal toplamSatis = Convert.ToDecimal(rapor["ToplamSatis"]);
-
-                // 3. Kar hesapla (Satış - Alış)
-                decimal toplamKar = toplamSatis - toplamAlis;
-
-                // 4. Sonucu Göster (String Format ile para birimi ekliyoruz: C2)
-                string mesaj = $"--- FİNANSAL DURUM RAPORU ---\n\n" +
-                               $"Toplam Satılan Araç: {satilanAdet} Adet\n" +
-                               $"-----------------------------------\n" +
-                               $"Toplam Maliyet (Gider): {toplamAlis:C2}\n" +
-                               $"Toplam Ciro (Gelir):    {toplamSatis:C2}\n" +
-                               $"-----------------------------------\n" +
-                               $"NET KAR: {toplamKar:C2}";
-
-                MessageBox.Show(mesaj, "Finansal Analiz", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("Rapor alınırken bir hata oluştu.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            // Artık basit mesaj kutusu yok, profesyonel rapor ekranı var!
+            FrmFinansalRapor frm = new FrmFinansalRapor();
+            frm.ShowDialog();
         }
 
         private void txtArama_TextChanged(object sender, EventArgs e)

@@ -145,6 +145,35 @@ namespace OtoGaleri.Service.AracYonetimi
                 return new DataTable();
             }
         }
+        public DataTable GetAylikSatisDetay(int yil, int ayNo)
+        {
+            try
+            {
+                string query = $@"
+                    SELECT 
+                        M.MarkaAdi + ' ' + Mo.ModelAdi AS [Araç],
+                        A.Yil,
+                        A.MusteriAdSoyad AS [Müşteri],
+                        A.MusteriTelefon AS [Telefon],
+                        A.AlisFiyat AS [Alış],
+                        A.SatisFiyat AS [Satış],
+                        (A.SatisFiyat - A.AlisFiyat) AS [Kar]
+                    FROM Tbl_Araclar A
+                    INNER JOIN Tbl_Paketler P ON A.PaketID = P.PaketID
+                    INNER JOIN Tbl_Modeller Mo ON P.ModelID = Mo.ModelID
+                    INNER JOIN Tbl_Markalar M ON Mo.MarkaID = M.MarkaID
+                    WHERE A.SatisDurumu = 1 
+                    AND YEAR(A.SatisTarihi) = {yil} 
+                    AND MONTH(A.SatisTarihi) = {ayNo}
+                    ORDER BY A.SatisTarihi DESC";
+
+                return _sqlHelper.GetDataTable(query);
+            }
+            catch
+            {
+                return new DataTable();
+            }
+        }
 
         // =============================================================
         // BÖLÜM 3: CRUD İŞLEMLERİ (EKLE - GÜNCELLE - SİL - GETİR)
@@ -282,6 +311,39 @@ namespace OtoGaleri.Service.AracYonetimi
                 else return null;
             }
             catch { return null; }
+        }
+        /// <summary>
+        /// Satışları aylara göre gruplayarak detaylı rapor getirir.
+        /// </summary>
+        public DataTable GetAylikAnaliz()
+        {
+            try
+            {
+                // Ay numarasını (1,2..) İsime (Ocak, Şubat..) çeviren SQL yapısı:
+                string query = @"
+                    SELECT 
+                        YEAR(SatisTarihi) AS [Yil],
+                        CASE MONTH(SatisTarihi)
+                            WHEN 1 THEN 'Ocak' WHEN 2 THEN 'Şubat' WHEN 3 THEN 'Mart'
+                            WHEN 4 THEN 'Nisan' WHEN 5 THEN 'Mayıs' WHEN 6 THEN 'Haziran'
+                            WHEN 7 THEN 'Temmuz' WHEN 8 THEN 'Ağustos' WHEN 9 THEN 'Eylül'
+                            WHEN 10 THEN 'Ekim' WHEN 11 THEN 'Kasım' WHEN 12 THEN 'Aralık'
+                        END AS [Ay],
+                        MONTH(SatisTarihi) AS [AyNo], -- Sıralama yapmak için gizli numara tutuyoruz
+                        COUNT(*) AS [Adet],
+                        SUM(ISNULL(SatisFiyat, 0)) AS [Ciro],
+                        SUM(ISNULL(SatisFiyat, 0) - ISNULL(AlisFiyat, 0)) AS [ToplamKar]
+                    FROM Tbl_Araclar
+                    WHERE SatisDurumu = 1 AND SatisTarihi IS NOT NULL
+                    GROUP BY YEAR(SatisTarihi), MONTH(SatisTarihi)
+                    ORDER BY Yil DESC, AyNo DESC"; // Numaraya göre sırala ama ismi göster
+
+                return _sqlHelper.GetDataTable(query);
+            }
+            catch (Exception)
+            {
+                return new DataTable();
+            }
         }
     }
 }
