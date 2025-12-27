@@ -16,7 +16,7 @@ namespace OtoGaleri.WinForms
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new OtoGaleri.WinForms.AracYonetimi.FrmAracListesi());
+            Application.Run(new FrmLogin());
         }
     }
 }
