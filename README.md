@@ -6,13 +6,14 @@ Bu proje, bir oto galerinin araç alım-satım süreçlerini, stok takibini ve f
 
 ---
 
-## 📸 Ekran Görüntüleri
+### 📸 Ekran Görüntüleri
 
 <p align="center">
-  <img src="araçListesi.png" width="30%" alt="Giriş"/>
-  &nbsp; &nbsp; &nbsp; <img src="araçEkle.png" width="30%" alt="Liste"/>
+  <img src="EkranGörüntüleri/araçListesi.png" width="30%" alt="Araç Listesi"/>
   &nbsp; &nbsp; &nbsp;
-  <img src="satısDetay.png" width="30%" alt="Rapor"/>
+  <img src="EkranGörüntüleri/araçEkle.png" width="30%" alt="Araç Ekleme"/>
+  &nbsp; &nbsp; &nbsp;
+  <img src="EkranGörüntüleri/satısDetay.png" width="30%" alt="Satış Detayı"/>
 </p>
 
 ---
