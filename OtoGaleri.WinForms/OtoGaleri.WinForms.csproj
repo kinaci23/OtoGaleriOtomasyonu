@@ -58,6 +58,12 @@
     <Compile Include="AracYonetimi\FrmAracListesi.Designer.cs">
       <DependentUpon>FrmAracListesi.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmSatisYap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmSatisYap.Designer.cs">
+      <DependentUpon>FrmSatisYap.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AracYonetimi\FrmAracEkle.resx">
@@ -65,6 +71,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AracYonetimi\FrmAracListesi.resx">
       <DependentUpon>FrmAracListesi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmSatisYap.resx">
+      <DependentUpon>FrmSatisYap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

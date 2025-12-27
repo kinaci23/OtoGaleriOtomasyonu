@@ -147,28 +147,33 @@ namespace OtoGaleri.WinForms.AracYonetimi
                 return;
             }
 
-            // 2. Yanlış Sekme Kontrolü
-            // Eğer zaten "Satılanlar" sekmesindeysek, tekrar satmaya çalışmasın.
+            // 2. Satılmış mı Kontrolü
             if (tabControl1.SelectedIndex == 1)
             {
                 MessageBox.Show("Bu araç zaten satılmış!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // 3. Onay Alma
-            DialogResult cevap = MessageBox.Show("Seçili aracı 'SATILDI' olarak işaretlemek üzeresiniz.\nOnaylıyor musunuz?", "Satış Onayı", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            // 3. Seçilen verileri al
+            int secilenId = Convert.ToInt32(dgvAraclar.SelectedRows[0].Cells["AracID"].Value);
+            string fiyat = dgvAraclar.SelectedRows[0].Cells["Satış Fiyatı"].Value.ToString();
 
-            if (cevap == DialogResult.Yes)
+            // 4. Yeni Satış Formunu AÇ
+            FrmSatisYap frm = new FrmSatisYap(fiyat);
+
+            // Eğer kullanıcı "ONAYLA" butonuna bastıysa (DialogResult.OK döndüyse)
+            if (frm.ShowDialog() == DialogResult.OK)
             {
-                int secilenId = Convert.ToInt32(dgvAraclar.SelectedRows[0].Cells["AracID"].Value);
+                string musteriAd = frm.MusteriAdSoyad;
+                string musteriTel = frm.MusteriTelefon;
 
-                // 4. Servise Gönder
-                string sonuc = _sAracYonetimi.AracSat(secilenId);
+                // Veritabanına kaydet
+                string sonuc = _sAracYonetimi.AracSat(secilenId, musteriAd, musteriTel);
 
                 if (sonuc == null)
                 {
-                    MessageBox.Show("Hayırlı olsun! Araç satıldı olarak işaretlendi.", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    Listele(); // Listeyi yenile (Araç buradan kaybolup diğer sekmeye gidecek)
+                    MessageBox.Show($"Hayırlı olsun! {musteriAd} adına satış gerçekleştirildi.", "Satış Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Listele();
                 }
                 else
                 {

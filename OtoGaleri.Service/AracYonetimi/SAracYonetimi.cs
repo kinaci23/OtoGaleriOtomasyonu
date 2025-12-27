@@ -244,14 +244,23 @@ namespace OtoGaleri.Service.AracYonetimi
         /// <summary>
         /// ID'si verilen aracı "Satıldı" olarak işaretler.
         /// </summary>
-        public string AracSat(int aracId)
+        /// <summary>
+        /// ID'si verilen aracı "Satıldı" olarak işaretler ve müşteri bilgilerini kaydeder.
+        /// </summary>
+        public string AracSat(int aracId, string adSoyad, string telefon)
         {
             string hata = null;
             try
             {
-                // SatisDurumu = 1 (Satıldı) yapıyoruz.
-                // Satış Tarihini de şu an (GETDATE) olarak güncelliyoruz ki raporlarda lazım olacak.
-                string query = $"UPDATE Tbl_Araclar SET SatisDurumu = 1, SatisTarihi = GETDATE() WHERE AracID = {aracId}";
+                // SQL Sorgusunu Güncelliyoruz:
+                // Hem durumu 1 yapıyoruz, hem tarihi atıyoruz, hem de müşteri bilgilerini yazıyoruz.
+                string query = $@"
+                    UPDATE Tbl_Araclar SET 
+                        SatisDurumu = 1, 
+                        SatisTarihi = GETDATE(),
+                        MusteriAdSoyad = '{adSoyad}',
+                        MusteriTelefon = '{telefon}'
+                    WHERE AracID = {aracId}";
 
                 int result = _sqlHelper.ExecuteQuery(query);
 
