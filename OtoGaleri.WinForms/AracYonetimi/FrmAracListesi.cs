@@ -24,10 +24,10 @@ namespace OtoGaleri.WinForms.AracYonetimi
             GridAyarlariniYap();
         }
 
-        // LİSTELEME METODU (ARTIK SEKME DURUMUNA GÖRE ÇALIŞIYOR)
+        // LİSTELEME METODU 
         private void Listele()
         {
-            // Eğer TabControl eklenmediyse veya hata veriyorsa, bu satır patlamasın diye kontrol:
+            
             if (tabControl1 == null) return;
 
             // 0. index: Galeridekiler (Satılmadı -> False)
@@ -67,18 +67,18 @@ namespace OtoGaleri.WinForms.AracYonetimi
             dgvAraclar.BorderStyle = BorderStyle.None;
 
             // --- KOYU TEMA RENKLERİ (OKUNABİLİRLİK İÇİN) ---
-            dgvAraclar.BackgroundColor = System.Drawing.Color.FromArgb(38, 38, 38); // Tablo Arkaplanı
-            dgvAraclar.GridColor = System.Drawing.Color.FromArgb(50, 50, 50);      // Çizgi Rengi
+            dgvAraclar.BackgroundColor = System.Drawing.Color.FromArgb(38, 38, 38); 
+            dgvAraclar.GridColor = System.Drawing.Color.FromArgb(50, 50, 50);      
 
             // Satırların Rengi (Koyu Gri Zemin - Beyaz Yazı)
             dgvAraclar.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(38, 38, 38);
             dgvAraclar.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
-            dgvAraclar.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(100, 100, 100); // Seçilince Açık Gri
+            dgvAraclar.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(100, 100, 100); 
             dgvAraclar.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
 
             // Başlık (Header) Rengi
             dgvAraclar.EnableHeadersVisualStyles = false;
-            dgvAraclar.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.Black; // Başlık Siyah
+            dgvAraclar.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.Black; 
             dgvAraclar.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
             dgvAraclar.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.Black;
             dgvAraclar.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, FontStyle.Bold);
@@ -105,7 +105,7 @@ namespace OtoGaleri.WinForms.AracYonetimi
         {
             if (e.RowIndex < 0) return;
 
-            // Eğer "Satılanlar" sekmesindeysek düzenlemeye izin vermeyelim (Mantıken satılmış araç değişmez)
+            
             if (tabControl1.SelectedIndex == 1)
             {
                 DevExpress.XtraEditors.XtraMessageBox.Show("Satılmış araçlar üzerinde düzenleme yapılamaz.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -147,7 +147,7 @@ namespace OtoGaleri.WinForms.AracYonetimi
         }
 
         // --- HATALARI SUSTURAN BOŞ METODLAR ---
-        // Daha önce yanlışlıkla çift tıklanan eventlerin hata vermemesi için:
+        
         private void tabPage1_Click(object sender, EventArgs e) { }
 
         private void btnSatisYap_Click(object sender, EventArgs e)
@@ -196,14 +196,14 @@ namespace OtoGaleri.WinForms.AracYonetimi
 
         private void btnRapor_Click(object sender, EventArgs e)
         {
-            // Artık basit mesaj kutusu yok, profesyonel rapor ekranı var!
+            
             FrmFinansalRapor frm = new FrmFinansalRapor();
             frm.ShowDialog();
         }
 
         private void txtArama_TextChanged(object sender, EventArgs e)
         {
-            string aranan = txtArama.Text.Trim(); // Başındaki sonundaki boşlukları al
+            string aranan = txtArama.Text.Trim(); 
 
             // Hangi sekmedeyiz? (0: Galeride, 1: Satılanlar)
             bool satildiMi = tabControl1.SelectedIndex == 1;

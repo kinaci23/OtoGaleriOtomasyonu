@@ -50,7 +50,7 @@
             this.dgvAraclar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgvAraclar.Location = new System.Drawing.Point(0, 103);
             this.dgvAraclar.Name = "dgvAraclar";
-            this.dgvAraclar.Size = new System.Drawing.Size(788, 552);
+            this.dgvAraclar.Size = new System.Drawing.Size(822, 552);
             this.dgvAraclar.TabIndex = 0;
             this.dgvAraclar.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAraclar_CellDoubleClick);
             // 
@@ -66,7 +66,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(788, 103);
+            this.panel1.Size = new System.Drawing.Size(822, 103);
             this.panel1.TabIndex = 1;
             // 
             // txtArama
@@ -139,7 +139,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(235, 0);
+            this.tabPage2.Size = new System.Drawing.Size(221, 0);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "SATILAN ARAÇLAR";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -175,7 +175,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(805, 492);
+            this.ClientSize = new System.Drawing.Size(839, 492);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.dgvAraclar);
             this.MaximizeBox = false;

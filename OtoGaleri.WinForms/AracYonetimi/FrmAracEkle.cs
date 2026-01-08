@@ -1,7 +1,8 @@
-﻿using System;
+﻿using OtoGaleri.Service.AracYonetimi;
+using System;
 using System.Data;
+using System.Drawing;
 using System.Windows.Forms;
-using OtoGaleri.Service.AracYonetimi;
 
 namespace OtoGaleri.WinForms.AracYonetimi
 {
@@ -9,10 +10,10 @@ namespace OtoGaleri.WinForms.AracYonetimi
     {
         private SAracYonetimi _sAracYonetimi;
 
-        // Bu değişken formun modunu belirleyecek (0: Yeni Kayıt, >0: Güncelleme)
+        
         private int _gelenAracId = 0;
 
-        // Constructor: Artık dışarıdan ID alabiliyor (Varsayılan 0)
+        
         public FrmAracEkle(int aracId = 0)
         {
             InitializeComponent();
@@ -23,10 +24,11 @@ namespace OtoGaleri.WinForms.AracYonetimi
         private void FrmAracEkle_Load(object sender, EventArgs e)
         {
             Tasarim.Uygula(this);
-            // Önce listeleri hazırlayalım
+            
+            YapayZekaButonuEkle();
             MarkalariYukle();
 
-            // Eğer düzenleme modundaysak (ID geldiyse), verileri kutulara doldur
+            
             if (_gelenAracId > 0)
             {
                 VerileriDoldur();
@@ -35,9 +37,91 @@ namespace OtoGaleri.WinForms.AracYonetimi
             }
         }
 
+        private void YapayZekaButonuEkle()
+        {
+            // Buton Özellikleri
+            Button btnAI = new Button();
+            btnAI.Text = "✨ Yapay Zeka ile Oluştur"; 
+            btnAI.Size = new Size(180, 30); 
+            btnAI.BackColor = Color.FromArgb(0, 120, 215);
+            btnAI.ForeColor = Color.White;
+            btnAI.FlatStyle = FlatStyle.Flat;
+            btnAI.FlatAppearance.BorderSize = 0;
+            btnAI.Cursor = Cursors.Hand;
+            btnAI.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+
+            
+            Control[] bulunanlar = Controls.Find("txtAciklama", true);
+
+            if (bulunanlar.Length > 0)
+            {
+                Control kutu = bulunanlar[0];
+
+                int xKonumu = kutu.Location.X + kutu.Width - btnAI.Size.Width;
+
+                
+                int yKonumu = kutu.Location.Y - btnAI.Size.Height - 5;
+
+                btnAI.Location = new Point(xKonumu, yKonumu);
+
+               
+                btnAI.Click += BtnAI_Click;
+
+                this.Controls.Add(btnAI);
+                btnAI.BringToFront();
+            }
+        }
+
+        // --- BUTONA BASINCA ÇALIŞACAK KOD ---
+        private async void BtnAI_Click(object sender, EventArgs e)
+        {
+            
+
+            // Basit kontrol: Boş mu?
+            if (string.IsNullOrEmpty(cmbMarka.Text) || string.IsNullOrEmpty(cmbModel.Text))
+            {
+                MessageBox.Show("Lütfen önce Marka ve Model bilgilerini seçin.", "Eksik Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            
+            Button btn = (Button)sender;
+            btn.Text = "Yazılıyor... ⏳";
+            btn.Enabled = false;
+
+            try
+            {
+                
+                YapayZeka ai = new YapayZeka();
+
+                // Formdaki verileri gönder
+                string sonuc = await ai.AciklamaUret(
+                    cmbMarka.Text,
+                    cmbModel.Text,
+                    cmbPaket.Text,
+                    txtYil.Text,
+                    txtKm.Text,
+                    txtRenk.Text
+                );
+
+                
+                txtAciklama.Text = sonuc;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Hata: " + ex.Message);
+            }
+            finally
+            {
+                
+                btn.Text = "✨ Yapay Zeka ile Açıklama Yaz";
+                btn.Enabled = true;
+            }
+        }
+
         private void MarkalariYukle()
         {
-            // Temizlik
+            
             cmbModel.DataSource = null;
             cmbPaket.DataSource = null;
 
@@ -45,27 +129,26 @@ namespace OtoGaleri.WinForms.AracYonetimi
             cmbMarka.DisplayMember = "MarkaAdi";
             cmbMarka.ValueMember = "MarkaID";
             cmbMarka.DataSource = dt;
-            cmbMarka.SelectedIndex = -1; // Seçimi temizle
+            cmbMarka.SelectedIndex = -1; 
         }
 
-        // DÜZENLEME MODUNDA KUTULARI DOLDURAN METOT
+        
         private void VerileriDoldur()
         {
             DataRow row = _sAracYonetimi.GetAracBilgi(_gelenAracId);
 
             if (row != null)
             {
-                // 1. Önce ComboBox Zincirini Tetikleyerek Dolduruyoruz
-                // Markayı seçtiğimiz an otomatik olarak Model listesi yüklenir
+                
                 cmbMarka.SelectedValue = row["MarkaID"];
 
-                // Modeli seçtiğimiz an Paket listesi yüklenir
+                
                 cmbModel.SelectedValue = row["ModelID"];
 
-                // Son olarak Paketi seçiyoruz
+                
                 cmbPaket.SelectedValue = row["PaketID"];
 
-                // 2. Diğer Kutucuklar
+                
                 txtYil.Text = row["Yil"].ToString();
                 txtKm.Text = row["Km"].ToString();
                 txtRenk.Text = row["Renk"].ToString();
@@ -131,7 +214,7 @@ namespace OtoGaleri.WinForms.AracYonetimi
 
             string sonuc;
 
-            // KARAR ANI: YENİ Mİ YOKSA GÜNCELLEME Mİ?
+            
             if (_gelenAracId > 0)
             {
                 sonuc = _sAracYonetimi.AracGuncelle(_gelenAracId, paketId, yil, km, renk, alisFiyat, satisFiyat, aciklama);
@@ -153,7 +236,7 @@ namespace OtoGaleri.WinForms.AracYonetimi
         }
 
         // --- HATALARI GİDERMEK İÇİN EKLENEN BOŞ METOTLAR ---
-        // Tasarımda yanlışlıkla çift tıklanan label ve text'lerin kod karşılıkları:
+        
 
         private void label1_Click(object sender, EventArgs e) { }
         private void label2_Click(object sender, EventArgs e) { }

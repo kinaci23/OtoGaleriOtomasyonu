@@ -5,15 +5,15 @@ namespace OtoGaleri.WinForms
 {
     public partial class FrmSatisYap : DevExpress.XtraEditors.XtraForm
     {
-        // Ana formun bu bilgilere ulaşabilmesi için değişkenler tanımlıyoruz
+        
         public string MusteriAdSoyad { get; private set; }
         public string MusteriTelefon { get; private set; }
 
-        // Constructor (Yapıcı Metot): Form açılırken fiyatı dışarıdan alır
+        
         public FrmSatisYap(string fiyatBilgisi)
         {
             InitializeComponent();
-            lblFiyat.Text = fiyatBilgisi; // Fiyatı etikete yazdır
+            lblFiyat.Text = fiyatBilgisi; 
         }
 
         // ONAYLA BUTONU

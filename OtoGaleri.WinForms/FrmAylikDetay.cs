@@ -70,7 +70,7 @@ namespace OtoGaleri.WinForms
             }
         }
 
-        // Yanlışlıkla oluşturulan tıklama olayını susturmak için:
+        
         private void dgvDetay_CellDoubleClick(object sender, DataGridViewCellEventArgs e) { }
     }
 }

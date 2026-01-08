@@ -28,7 +28,7 @@ namespace OtoGaleri.WinForms
             DataRow genelRapor = _sAracYonetimi.GetSatisRaporu();
             if (genelRapor != null)
             {
-                // Eğer tasarımda isimleri farklıysa burası hata verebilir, kontrol et.
+                
                 if (label3 != null) label3.Text = "Toplam Satış: " + genelRapor["ToplamAdet"].ToString() + " Adet";
 
                 decimal ciro = Convert.ToDecimal(genelRapor["ToplamSatis"]);
@@ -78,7 +78,6 @@ namespace OtoGaleri.WinForms
             if (dgvRapor.Columns["ToplamKar"] != null)
             {
                 dgvRapor.Columns["ToplamKar"].DefaultCellStyle.Format = "C2";
-                // Kar sütunu dikkat çeksin diye Yeşil yapıyoruz ama Koyu zeminde okunması için "LimeGreen" seçtim
                 dgvRapor.Columns["ToplamKar"].DefaultCellStyle.ForeColor = System.Drawing.Color.LimeGreen;
                 dgvRapor.Columns["ToplamKar"].DefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
             }
@@ -115,7 +114,7 @@ namespace OtoGaleri.WinForms
         }
 
         // --- TASARIMCI HATASINI KURTARAN BOŞ METODLAR ---
-        // (Ekran görüntüsündeki hatayı bu çözecek)
+        
         private void lblGenelKar_Click(object sender, EventArgs e) { }
         private void label1_Click(object sender, EventArgs e) { }
         private void lblToplamSatis_Click(object sender, EventArgs e) { }
