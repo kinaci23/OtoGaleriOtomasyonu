@@ -22,7 +22,7 @@ namespace OtoGaleri.WinForms
             // 1. Boş Alan Kontrolü
             if (string.IsNullOrWhiteSpace(txtAdSoyad.Text) || string.IsNullOrWhiteSpace(txtTelefon.Text))
             {
-                MessageBox.Show("Lütfen müşteri adı ve telefon bilgisini giriniz.", "Eksik Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                DevExpress.XtraEditors.XtraMessageBox.Show("Lütfen müşteri adı ve telefon bilgisini giriniz.", "Eksik Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

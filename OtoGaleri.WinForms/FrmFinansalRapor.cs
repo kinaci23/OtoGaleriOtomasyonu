@@ -97,7 +97,7 @@ namespace OtoGaleri.WinForms
             // 3. Kontrol Et: Eğer veritabanından boş (DBNull) geldiyse işlem yapma
             if (yilDegeri == DBNull.Value || yilDegeri == null || ayNoDegeri == DBNull.Value || ayNoDegeri == null)
             {
-                MessageBox.Show("Bu satışın tarih bilgisi eksik olduğu için detayları görüntülenemiyor.", "Eksik Veri", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                DevExpress.XtraEditors.XtraMessageBox.Show("Bu satışın tarih bilgisi eksik olduğu için detayları görüntülenemiyor.", "Eksik Veri", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

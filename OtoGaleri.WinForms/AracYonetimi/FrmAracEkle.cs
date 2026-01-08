@@ -116,7 +116,7 @@ namespace OtoGaleri.WinForms.AracYonetimi
         {
             if (cmbPaket.SelectedValue == null)
             {
-                MessageBox.Show("Lütfen araç model ve paketini eksiksiz seçiniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                DevExpress.XtraEditors.XtraMessageBox.Show("Lütfen araç model ve paketini eksiksiz seçiniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -143,12 +143,12 @@ namespace OtoGaleri.WinForms.AracYonetimi
 
             if (sonuc == null)
             {
-                MessageBox.Show("İşlem başarıyla tamamlandı.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DevExpress.XtraEditors.XtraMessageBox.Show("İşlem başarıyla tamamlandı.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Hata oluştu: " + sonuc, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DevExpress.XtraEditors.XtraMessageBox.Show("Hata oluştu: " + sonuc, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

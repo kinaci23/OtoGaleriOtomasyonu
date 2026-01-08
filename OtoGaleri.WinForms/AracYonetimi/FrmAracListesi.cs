@@ -108,7 +108,7 @@ namespace OtoGaleri.WinForms.AracYonetimi
             // Eğer "Satılanlar" sekmesindeysek düzenlemeye izin vermeyelim (Mantıken satılmış araç değişmez)
             if (tabControl1.SelectedIndex == 1)
             {
-                MessageBox.Show("Satılmış araçlar üzerinde düzenleme yapılamaz.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DevExpress.XtraEditors.XtraMessageBox.Show("Satılmış araçlar üzerinde düzenleme yapılamaz.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -123,11 +123,11 @@ namespace OtoGaleri.WinForms.AracYonetimi
         {
             if (dgvAraclar.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Lütfen işlem yapılacak aracı seçiniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                DevExpress.XtraEditors.XtraMessageBox.Show("Lütfen işlem yapılacak aracı seçiniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            DialogResult cevap = MessageBox.Show("Seçili kaydı silmek istediğinize emin misiniz?", "Silme Onayı", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult cevap = DevExpress.XtraEditors.XtraMessageBox.Show("Seçili kaydı silmek istediğinize emin misiniz?", "Silme Onayı", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (cevap == DialogResult.Yes)
             {
@@ -136,12 +136,12 @@ namespace OtoGaleri.WinForms.AracYonetimi
 
                 if (sonuc == null)
                 {
-                    MessageBox.Show("Kayıt silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DevExpress.XtraEditors.XtraMessageBox.Show("Kayıt silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Listele();
                 }
                 else
                 {
-                    MessageBox.Show("Hata: " + sonuc, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    DevExpress.XtraEditors.XtraMessageBox.Show("Hata: " + sonuc, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -155,14 +155,14 @@ namespace OtoGaleri.WinForms.AracYonetimi
             // 1. Seçim Kontrolü
             if (dgvAraclar.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Lütfen satışı yapılacak aracı seçiniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                DevExpress.XtraEditors.XtraMessageBox.Show("Lütfen satışı yapılacak aracı seçiniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             // 2. Satılmış mı Kontrolü
             if (tabControl1.SelectedIndex == 1)
             {
-                MessageBox.Show("Bu araç zaten satılmış!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                DevExpress.XtraEditors.XtraMessageBox.Show("Bu araç zaten satılmış!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -184,12 +184,12 @@ namespace OtoGaleri.WinForms.AracYonetimi
 
                 if (sonuc == null)
                 {
-                    MessageBox.Show($"Hayırlı olsun! {musteriAd} adına satış gerçekleştirildi.", "Satış Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DevExpress.XtraEditors.XtraMessageBox.Show($"Hayırlı olsun! {musteriAd} adına satış gerçekleştirildi.", "Satış Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Listele();
                 }
                 else
                 {
-                    MessageBox.Show("Hata: " + sonuc, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    DevExpress.XtraEditors.XtraMessageBox.Show("Hata: " + sonuc, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

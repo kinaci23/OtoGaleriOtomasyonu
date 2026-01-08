@@ -26,7 +26,7 @@ namespace OtoGaleri.WinForms
             }
             else
             {
-                MessageBox.Show("Kullanıcı adı veya şifre hatalı!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DevExpress.XtraEditors.XtraMessageBox.Show("Kullanıcı adı veya şifre hatalı!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
