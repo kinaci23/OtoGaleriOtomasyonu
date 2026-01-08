@@ -5,7 +5,7 @@ using OtoGaleri.Service.AracYonetimi;
 
 namespace OtoGaleri.WinForms.AracYonetimi
 {
-    public partial class FrmAracEkle : Form
+    public partial class FrmAracEkle : DevExpress.XtraEditors.XtraForm
     {
         private SAracYonetimi _sAracYonetimi;
 
@@ -22,6 +22,7 @@ namespace OtoGaleri.WinForms.AracYonetimi
 
         private void FrmAracEkle_Load(object sender, EventArgs e)
         {
+            Tasarim.Uygula(this);
             // Önce listeleri hazırlayalım
             MarkalariYukle();
 

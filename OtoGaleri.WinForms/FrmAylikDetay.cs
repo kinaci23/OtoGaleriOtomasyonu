@@ -5,7 +5,7 @@ using OtoGaleri.Service.AracYonetimi;
 
 namespace OtoGaleri.WinForms
 {
-    public partial class FrmAylikDetay : Form
+    public partial class FrmAylikDetay : DevExpress.XtraEditors.XtraForm
     {
         private int _yil;
         private int _ayNo;
@@ -23,6 +23,7 @@ namespace OtoGaleri.WinForms
 
         private void FrmAylikDetay_Load(object sender, EventArgs e)
         {
+            Tasarim.Uygula(this);
             this.Text = $"{_ayAdi} {_yil} - Satış Detayları";
 
             // Verileri dgvDetay tablosuna yükle
@@ -39,30 +40,32 @@ namespace OtoGaleri.WinForms
             dgvDetay.RowHeadersVisible = false;
             dgvDetay.ReadOnly = true;
             dgvDetay.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvDetay.BackgroundColor = SystemColors.Control;
             dgvDetay.BorderStyle = BorderStyle.None;
 
-            // --- RENK AYARLARI (MAVİLERİ YOK ETME) ---
-            // 1. Satır seçilince GRİ olsun
-            dgvDetay.DefaultCellStyle.SelectionBackColor = Color.FromArgb(200, 200, 200);
-            dgvDetay.DefaultCellStyle.SelectionForeColor = Color.Black;
+            // --- KOYU TEMA DÜZELTMESİ ---
+            dgvDetay.BackgroundColor = System.Drawing.Color.FromArgb(38, 38, 38);
+            dgvDetay.GridColor = System.Drawing.Color.FromArgb(50, 50, 50);
 
-            // 2. Başlık (Header) Rengi
+            dgvDetay.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(38, 38, 38);
+            dgvDetay.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            dgvDetay.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(100, 100, 100);
+            dgvDetay.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+
+            // Başlık Rengi
             dgvDetay.EnableHeadersVisualStyles = false;
-            dgvDetay.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(45, 45, 48);
-            dgvDetay.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgvDetay.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(45, 45, 48);
+            dgvDetay.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.Black;
+            dgvDetay.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            dgvDetay.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.Black;
             dgvDetay.ColumnHeadersHeight = 35;
 
-            // --- PARA BİRİMİ VE RENKLENDİRME ---
+            // --- PARA FORMATLARI ---
             if (dgvDetay.Columns["Alış"] != null) dgvDetay.Columns["Alış"].DefaultCellStyle.Format = "C2";
             if (dgvDetay.Columns["Satış"] != null) dgvDetay.Columns["Satış"].DefaultCellStyle.Format = "C2";
 
             if (dgvDetay.Columns["Kar"] != null)
             {
                 dgvDetay.Columns["Kar"].DefaultCellStyle.Format = "C2";
-                dgvDetay.Columns["Kar"].DefaultCellStyle.ForeColor = Color.SeaGreen;
-                dgvDetay.Columns["Kar"].DefaultCellStyle.SelectionForeColor = Color.DarkGreen;
+                dgvDetay.Columns["Kar"].DefaultCellStyle.ForeColor = System.Drawing.Color.LimeGreen;
                 dgvDetay.Columns["Kar"].DefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
             }
         }

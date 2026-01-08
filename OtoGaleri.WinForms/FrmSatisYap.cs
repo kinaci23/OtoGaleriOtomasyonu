@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace OtoGaleri.WinForms
 {
-    public partial class FrmSatisYap : Form
+    public partial class FrmSatisYap : DevExpress.XtraEditors.XtraForm
     {
         // Ana formun bu bilgilere ulaşabilmesi için değişkenler tanımlıyoruz
         public string MusteriAdSoyad { get; private set; }

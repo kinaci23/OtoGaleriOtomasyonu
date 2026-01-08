@@ -62,7 +62,7 @@
             // 
             // txtKullaniciAdi
             // 
-            this.txtKullaniciAdi.BackColor = System.Drawing.Color.DimGray;
+            this.txtKullaniciAdi.BackColor = System.Drawing.Color.Silver;
             this.txtKullaniciAdi.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.txtKullaniciAdi.ForeColor = System.Drawing.Color.White;
             this.txtKullaniciAdi.Location = new System.Drawing.Point(140, 146);
@@ -84,7 +84,7 @@
             // 
             // txtSifre
             // 
-            this.txtSifre.BackColor = System.Drawing.Color.DimGray;
+            this.txtSifre.BackColor = System.Drawing.Color.Silver;
             this.txtSifre.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.txtSifre.ForeColor = System.Drawing.Color.White;
             this.txtSifre.Location = new System.Drawing.Point(140, 190);
@@ -121,9 +121,10 @@
             // 
             // FrmLogin
             // 
+            this.Appearance.ForeColor = System.Drawing.Color.White;
+            this.Appearance.Options.UseForeColor = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.DimGray;
             this.ClientSize = new System.Drawing.Size(350, 450);
             this.Controls.Add(this.btnCikis);
             this.Controls.Add(this.btnGiris);
@@ -132,7 +133,6 @@
             this.Controls.Add(this.txtKullaniciAdi);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FrmLogin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -6,7 +6,7 @@ using OtoGaleri.Service.AracYonetimi;
 
 namespace OtoGaleri.WinForms.AracYonetimi
 {
-    public partial class FrmAracListesi : Form
+    public partial class FrmAracListesi : DevExpress.XtraEditors.XtraForm
     {
         private SAracYonetimi _sAracYonetimi;
 
@@ -19,6 +19,7 @@ namespace OtoGaleri.WinForms.AracYonetimi
         // FORM YÜKLENİRKEN
         private void FrmAracListesi_Load(object sender, EventArgs e)
         {
+            Tasarim.Uygula(this);
             Listele();
             GridAyarlariniYap();
         }
@@ -56,31 +57,37 @@ namespace OtoGaleri.WinForms.AracYonetimi
         {
             if (dgvAraclar.DataSource == null) return;
 
+            // --- TEMEL GÖRÜNÜM ---
             dgvAraclar.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvAraclar.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvAraclar.MultiSelect = false;
             dgvAraclar.ReadOnly = true;
             dgvAraclar.AllowUserToAddRows = false;
             dgvAraclar.RowHeadersVisible = false;
-            dgvAraclar.BackgroundColor = SystemColors.Control;
             dgvAraclar.BorderStyle = BorderStyle.None;
 
-            // Renk Ayarları
-            dgvAraclar.DefaultCellStyle.SelectionBackColor = Color.FromArgb(200, 200, 200);
-            dgvAraclar.DefaultCellStyle.SelectionForeColor = Color.Black;
+            // --- KOYU TEMA RENKLERİ (OKUNABİLİRLİK İÇİN) ---
+            dgvAraclar.BackgroundColor = System.Drawing.Color.FromArgb(38, 38, 38); // Tablo Arkaplanı
+            dgvAraclar.GridColor = System.Drawing.Color.FromArgb(50, 50, 50);      // Çizgi Rengi
 
+            // Satırların Rengi (Koyu Gri Zemin - Beyaz Yazı)
+            dgvAraclar.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(38, 38, 38);
+            dgvAraclar.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            dgvAraclar.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(100, 100, 100); // Seçilince Açık Gri
+            dgvAraclar.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+
+            // Başlık (Header) Rengi
             dgvAraclar.EnableHeadersVisualStyles = false;
-            dgvAraclar.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(45, 45, 48);
-            dgvAraclar.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgvAraclar.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(45, 45, 48); // Mavi olmasın
-            dgvAraclar.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            dgvAraclar.ColumnHeadersHeight = 35;
+            dgvAraclar.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.Black; // Başlık Siyah
+            dgvAraclar.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            dgvAraclar.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.Black;
+            dgvAraclar.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, FontStyle.Bold);
+            dgvAraclar.ColumnHeadersHeight = 40;
 
-            // Gizlenecek Sütun
+            // --- ÖZEL SÜTUN AYARLARI ---
             if (dgvAraclar.Columns["AracID"] != null)
                 dgvAraclar.Columns["AracID"].Visible = false;
 
-            // Para Formatı
             if (dgvAraclar.Columns["Satış Fiyatı"] != null)
                 dgvAraclar.Columns["Satış Fiyatı"].DefaultCellStyle.Format = "C2";
         }

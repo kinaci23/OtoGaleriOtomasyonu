@@ -4,11 +4,12 @@ using System.Windows.Forms;
 
 namespace OtoGaleri.WinForms
 {
-    public partial class FrmLogin : Form
+    public partial class FrmLogin : DevExpress.XtraEditors.XtraForm
     {
         public FrmLogin()
         {
             InitializeComponent();
+            Tasarim.Uygula(this);
         }
 
         private void btnGiris_Click(object sender, EventArgs e)

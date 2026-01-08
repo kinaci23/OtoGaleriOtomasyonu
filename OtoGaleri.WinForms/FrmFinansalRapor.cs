@@ -6,7 +6,7 @@ using OtoGaleri.Service.AracYonetimi;
 
 namespace OtoGaleri.WinForms
 {
-    public partial class FrmFinansalRapor : Form
+    public partial class FrmFinansalRapor : DevExpress.XtraEditors.XtraForm
     {
         private SAracYonetimi _sAracYonetimi;
 
@@ -18,6 +18,7 @@ namespace OtoGaleri.WinForms
 
         private void FrmFinansalRapor_Load(object sender, EventArgs e)
         {
+            Tasarim.Uygula(this);
             RaporlariYukle();
             GridAyarlariniYap();
         }
@@ -52,33 +53,33 @@ namespace OtoGaleri.WinForms
             dgvRapor.MultiSelect = false;
             dgvRapor.ReadOnly = true;
             dgvRapor.RowHeadersVisible = false;
-            dgvRapor.BackgroundColor = SystemColors.Control;
             dgvRapor.BorderStyle = BorderStyle.None;
 
-            // --- RENK AYARLARI (MAVİLERİ YOK ETME) ---
-            // 1. Satır seçilince GRİ olsun (Mavi değil)
-            dgvRapor.DefaultCellStyle.SelectionBackColor = Color.FromArgb(200, 200, 200);
-            dgvRapor.DefaultCellStyle.SelectionForeColor = Color.Black;
+            // --- KOYU TEMA DÜZELTMESİ ---
+            dgvRapor.BackgroundColor = System.Drawing.Color.FromArgb(38, 38, 38);
+            dgvRapor.GridColor = System.Drawing.Color.FromArgb(50, 50, 50);
 
-            // 2. Başlık (Header) Rengi
-            dgvRapor.EnableHeadersVisualStyles = false; // Bunu demezsek renkler değişmez!
-            dgvRapor.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(45, 45, 48); // Koyu Gri
-            dgvRapor.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgvRapor.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(45, 45, 48); // Başlığa tıklayınca renk değişmesin
+            dgvRapor.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(38, 38, 38);
+            dgvRapor.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            dgvRapor.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(100, 100, 100);
+            dgvRapor.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+
+            // Başlık Rengi
+            dgvRapor.EnableHeadersVisualStyles = false;
+            dgvRapor.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.Black;
+            dgvRapor.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            dgvRapor.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.Black;
             dgvRapor.ColumnHeadersHeight = 35;
 
             // --- SÜTUN GİZLEME VE FORMATLAMA ---
-            if (dgvRapor.Columns["AyNo"] != null)
-                dgvRapor.Columns["AyNo"].Visible = false;
-
-            if (dgvRapor.Columns["Ciro"] != null)
-                dgvRapor.Columns["Ciro"].DefaultCellStyle.Format = "C2";
+            if (dgvRapor.Columns["AyNo"] != null) dgvRapor.Columns["AyNo"].Visible = false;
+            if (dgvRapor.Columns["Ciro"] != null) dgvRapor.Columns["Ciro"].DefaultCellStyle.Format = "C2";
 
             if (dgvRapor.Columns["ToplamKar"] != null)
             {
                 dgvRapor.Columns["ToplamKar"].DefaultCellStyle.Format = "C2";
-                dgvRapor.Columns["ToplamKar"].DefaultCellStyle.ForeColor = Color.SeaGreen;
-                dgvRapor.Columns["ToplamKar"].DefaultCellStyle.SelectionForeColor = Color.DarkGreen; // Seçilince de yeşil kalsın
+                // Kar sütunu dikkat çeksin diye Yeşil yapıyoruz ama Koyu zeminde okunması için "LimeGreen" seçtim
+                dgvRapor.Columns["ToplamKar"].DefaultCellStyle.ForeColor = System.Drawing.Color.LimeGreen;
                 dgvRapor.Columns["ToplamKar"].DefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
             }
         }
